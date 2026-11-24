@@ -790,7 +790,7 @@ window.ULDATA={"nationalities":[{"id":"n1","set":"Purchases, late Feb–May 2026
  let rw;window.addEventListener('resize',()=>{clearTimeout(rw);rw=setTimeout(all,200);});
  // pick up fresh data when the portal is hosted next to an updated data.json
  let last='';
- function pull(){if(!location.protocol.startsWith('http'))return;fetch('data.json?t='+Date.now(),{cache:'no-store'}).then(r=>r.ok?r.text():null).then(t=>{if(t&&t!==last){last=t;const j=JSON.parse(t);if(j._v&&window.ULDATA._v&&j._v!==window.ULDATA._v){location.reload();return;}D=j;all();}}).catch(()=>{});}
+ function pull(){if(!location.protocol.startsWith('http'))return;fetch('data.json',{cache:'no-cache'}).then(r=>r.ok?r.text():null).then(t=>{if(t&&t!==last){last=t;const j=JSON.parse(t);if(j._v&&window.ULDATA._v&&j._v!==window.ULDATA._v){location.reload();return;}D=j;all();}}).catch(()=>{});}
  pull(); setInterval(pull,120000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)pull();});
  window.addEventListener('online',pull);
