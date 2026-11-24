@@ -1,4 +1,4 @@
-const C='uniland-v1';
+const C='uniland-v2';
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(['./','index.html','data.json','manifest.json','icon-192.png'])).catch(()=>{}));});
 self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
 self.addEventListener('fetch',e=>{if(e.request.method!=='GET')return;
