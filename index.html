@@ -669,13 +669,15 @@ html.ul-client #ul-share{display:none!important}
 
 <!-- MAP -->
 <section class="ul-tab" id="atlas" hidden>
-  <div class="ul-head"><span class="ul-eyebrow">Dubai &amp; UAE map</span><h2>Every area at a glance</h2><p>Drag to move, pinch or use + / − to zoom. Tap an area to see its sales and prices.</p></div>
+  <div class="ul-head"><span class="ul-eyebrow">Dubai &amp; UAE map</span><h2>Every area at a glance</h2><p>Pick an emirate to see its areas and every project. Drag to move, pinch or use + / − to zoom. Tap an area to see its sales and prices.</p></div>
+  <div class="ul-pick"><select class="dash-select" data-draw="sel-mapem" data-source="area_geo projects" aria-label="Emirate"></select></div>
   <div class="ul-pick"><select class="dash-select" data-draw="sel-mapyr" data-source="area_years area_periods area_prices" aria-label="Year"></select></div>
   <div class="ul-sub" role="tablist"><button type="button" class="on" data-sub="at-ready">Secondary price</button><button type="button" data-sub="at-off">Off-plan price</button><button type="button" data-sub="at-yield">Rental yield</button></div>
   <div class="ul-card ul-mapcard">
     <div class="ul-mapwrap" data-zk="at"><div class="ul-chart" data-draw="ch-map" data-source="area_geo area_profile" style="min-height:520px"></div><div class="ul-mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" aria-label="Show Dubai">⟲</button><button type="button" data-z="uae" aria-label="Show whole UAE" style="font-size:10.5px;font-weight:700">UAE</button></div></div>
     <div class="ul-scale" data-draw="map-key" data-source="area_profile area_years area_periods"></div>
   </div>
+  <div class="ul-card" data-draw="map-em" data-source="area_geo projects"></div>
   <div class="ul-card ul-mapinfo" data-draw="map-card" data-source="area_profile projects area_years area_periods"></div>
 </section>
 
@@ -1203,7 +1205,8 @@ function drawMap(box,metric,hl,H,key){
   const sea=root.append('text').attr('x',X(53.2)).attr('y',Y(25.3)).style('font-style','italic').style('fill','rgba(143,169,184,.7)').text('Arabian Gulf');
   const szr=root.append('text').attr('x',X(55.215)).attr('y',Y(25.135)).attr('transform',`rotate(-38 ${X(55.215)} ${Y(25.135)})`).style('fill','rgba(241,233,220,.35)').text('Sheikh Zayed Rd');
   const YR=mapYr(key); if(YR) metric='ready';
-  const data=g.map(r=>{const p=P.find(q=>q.area===r.area)||{};if(YR){const a=PR(r.area,YR)||{};return {...r,p,v:a.psf??null,n:+a.n||0};}return {...r,p,v:metricOf(p,metric),n:(+p.ready_sales||0)+(+p.offplan_sales||0)};});
+  const EMsel=key==='at'?(st.mapEm||'Dubai'):'all';
+  const data=g.filter(r=>EMsel==='all'||(r.emirate||'Dubai')===EMsel).map(r=>{const p=P.find(q=>q.area===r.area)||{};if(YR){const a=PR(r.area,YR)||{};return {...r,p,v:a.psf??null,n:+a.n||0};}return {...r,p,v:metricOf(p,metric),n:(+p.ready_sales||0)+(+p.offplan_sales||0)};});
   const vals=data.map(d=>d.v).filter(v=>v!=null); const ext=d3.extent(vals);
   const col=d3.scaleLinear().domain([0,1/3,2/3,1].map(t=>ext[0]+(ext[1]-ext[0])*t)).range(RAMP);
   const nmax=d3.max(data,d=>d.n)||1; const R=d=>d.n?6+16*Math.sqrt(d.n/nmax):5;
@@ -1238,16 +1241,21 @@ function drawMap(box,metric,hl,H,key){
       gp.select('text.lab').attr('x',x).style('font-size',fs+'px').style('display',free?null:'none');});
     sea.style('font-size',(13/kz)+'px');emir.style('font-size',(Math.max(9,15/Math.sqrt(kz))/kz)+'px');szr.style('font-size',(10/kz)+'px');
   }
-  const dub=data.filter(d=>!d.emirate||d.emirate==='Dubai');const bx0=d3.min(dub,d=>X(d.lon))-25,bx1=d3.max(dub,d=>X(d.lon))+90,by0=d3.min(dub,d=>Y(d.lat))-25,by1=d3.max(dub,d=>Y(d.lat))+25;
+  const dub0=data.filter(d=>!d.emirate||d.emirate==='Dubai');const dub=dub0.length?dub0:data.length?data:g.filter(d=>!d.emirate||d.emirate==='Dubai');const bx0=d3.min(dub,d=>X(d.lon))-25,bx1=d3.max(dub,d=>X(d.lon))+90,by0=d3.min(dub,d=>Y(d.lat))-25,by1=d3.max(dub,d=>Y(d.lat))+25;
   const hk=Math.max(1,Math.min(W/(bx1-bx0),H/(by1-by0)));const HOME=d3.zoomIdentity.translate(W/2,H/2).scale(hk).translate(-(bx0+bx1)/2,-(by0+by1)/2);
   const zoom=d3.zoom().scaleExtent([1,Math.max(12,hk*10)]).translateExtent([[0,0],[W,H]]).on('zoom',(e)=>{root.attr('transform',e.transform);relabel(e.transform.k);st['mapT_'+key]=e.transform;})
     .on('start',()=>svg.style('cursor','grabbing')).on('end',()=>svg.style('cursor','grab'));
   svg.call(zoom).on('dblclick.zoom',null);
+  function emT(em){if(!em||em==='all')return d3.zoomIdentity;const pts=g.filter(r=>(r.emirate||'Dubai')===em);
+    if(!pts.length){const E=EMIR.find(e=>e[0]===em);if(!E)return HOME;return d3.zoomIdentity.translate(W/2,H/2).scale(4).translate(-X(E[2]),-Y(E[1]));}
+    const a0=d3.min(pts,d=>X(d.lon)),a1=d3.max(pts,d=>X(d.lon)),b0=d3.min(pts,d=>Y(d.lat)),b1=d3.max(pts,d=>Y(d.lat));
+    const padX=Math.min(130,W*0.3),padY=60;const kk=Math.max(1,Math.min(60,(W-padX)/Math.max(a1-a0,.5),(H-padY)/Math.max(b1-b0,.5),pts.length===1?12:60));
+    return d3.zoomIdentity.translate(W/2-padX*0.3,H/2).scale(kk).translate(-(a0+a1)/2,-(b0+b1)/2);}
   const t0=st['mapT_'+key];
-  if(t0) svg.call(zoom.transform,t0); else svg.call(zoom.transform,HOME);
+  if(t0) svg.call(zoom.transform,t0); else svg.call(zoom.transform,key==='at'?emT(EMsel):HOME);
   if(key==='ex'&&hl&&!t0){const d=data.find(q=>q.area===hl);if(d)svg.call(zoom.transform,d3.zoomIdentity.translate(W/2,H/2).scale(hk*2.5).translate(-X(d.lon),-Y(d.lat)));}
   window.ULzoom=window.ULzoom||{};
-  window.ULzoom[key]={in:()=>svg.transition().duration(300).call(zoom.scaleBy,1.6),out:()=>svg.transition().duration(300).call(zoom.scaleBy,1/1.6),reset:()=>svg.transition().duration(400).call(zoom.transform,HOME),uae:()=>svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity)};
+  window.ULzoom[key]={in:()=>svg.transition().duration(300).call(zoom.scaleBy,1.6),out:()=>svg.transition().duration(300).call(zoom.scaleBy,1/1.6),reset:()=>svg.transition().duration(400).call(zoom.transform,key==='at'?emT(EMsel):HOME),uae:()=>svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity),em:(e)=>svg.transition().duration(500).call(zoom.transform,emT(e))};
 }
 dash.draw('sel-mapyr',(sel)=>{const ys=[...new Set((rows('area_years')||[]).map(r=>r.year))].filter(y=>y<new Date().getFullYear()).sort((a,b)=>b-a);
   const ps=[...new Map((rows('area_periods')||[]).filter(r=>/-q\d$/.test(r.period_id)).map(r=>[r.period_id,r.period])).entries()].sort((a,b)=>b[0].localeCompare(a[0]));
@@ -1457,6 +1465,31 @@ dash.draw('pj-view',(box)=>{
 
 // ---- map: zoom buttons + area card ----
 document.addEventListener('click',(e)=>{const b=e.target.closest?e.target.closest('[data-z]'):null;if(!b)return;const k=b.closest('[data-zk]').getAttribute('data-zk');const z=window.ULzoom&&window.ULzoom[k];if(z)z[b.getAttribute('data-z')]();});
+const EMS=['Dubai','Abu Dhabi','Sharjah','Ajman','Ras Al Khaimah','Umm Al Quwain','Fujairah'];
+function emOf(a){const r=(rows('area_geo')||[]).find(g=>g.area===a);return r?(r.emirate||'Dubai'):'Dubai';}
+dash.draw('sel-mapem',(sel)=>{const pr=rows('projects')||[];const cnt={};pr.forEach(r=>{const e=emOf(r.area);cnt[e]=(cnt[e]||0)+1;});
+  sel.replaceChildren(new Option('All UAE · '+fmt(pr.length,'n0')+' projects','all'),...EMS.map(e=>new Option(e+' · '+(cnt[e]?fmt(cnt[e],'n0')+(cnt[e]===1?' project':' projects'):'no projects yet'),e)));
+  sel.value=st.mapEm||'Dubai';
+  sel.onchange=()=>{st.mapEm=sel.value;st.mapSel=null;st.mapT_at=null;dash.draw('ch-map');dash.draw('map-key');dash.draw('map-card');dash.draw('map-em');};});
+dash.draw('map-em',(box)=>{const em=st.mapEm||'Dubai';const pr=(rows('projects')||[]).filter(r=>em==='all'||emOf(r.area)===em);
+  const by=new Map();pr.forEach(r=>{if(!by.has(r.area))by.set(r.area,[]);by.get(r.area).push(r);});
+  const areas=[...by.entries()].sort((a,b)=>b[1].length-a[1].length||a[0].localeCompare(b[0]));
+  const h=el('div','ul-mc-h');const hw=el('div');hw.append(el('span','ul-eyebrow',em==='all'?'All emirates':em),el('h3',null,fmt(pr.length,'n0')+' projects in '+areas.length+' areas'));h.append(hw);
+  const parts=[h];
+  if(!pr.length){parts.push(el('p','ul-note','No projects listed for '+em+' yet. They are being added.'));box.replaceChildren(...parts);return;}
+  const q=el('input','dash-select');q.type='search';q.placeholder='Search project or developer in '+(em==='all'?'the UAE':em);q.style.width='100%';q.style.margin='6px 0 10px';
+  const list=el('div');
+  const row=r=>{const d=el('div','ul-emrow');d.style.cssText='padding:6px 0;border-top:1px solid rgba(128,128,128,.18);font-size:13.5px';
+    const b=el('b',null,r.project);const m=[r.developer,r.launch_price_aed?'from AED '+fmt(+r.launch_price_aed,'n0'):null,r.handover?'handover '+r.handover:null,r.status,r.payment_plan].filter(Boolean).join(' · ');
+    d.append(b,el('div','ul-note',m));if(r.url&&/^https:\/\//.test(r.url)){d.style.cursor='pointer';d.onclick=()=>window.open(r.url,'_blank','noopener');}return d;};
+  const render=()=>{const t=q.value.trim().toLowerCase();list.replaceChildren();
+    if(t){const hits=pr.filter(r=>(r.project+' '+(r.developer||'')+' '+r.area).toLowerCase().includes(t)).slice(0,200);
+      list.append(el('p','ul-note',hits.length+' match'+(hits.length===1?'':'es')+(hits.length===200?' (first 200)':'')));hits.forEach(r=>{const x=row(r);x.querySelector('.ul-note').textContent=r.area+' · '+x.querySelector('.ul-note').textContent;list.append(x);});return;}
+    areas.forEach(([a,L])=>{const dt=el('details');const sm=el('summary',null,a+' · '+L.length+' project'+(L.length===1?'':'s'));sm.style.cssText='cursor:pointer;padding:7px 0;font-weight:600';dt.append(sm);
+      let done=false;dt.addEventListener('toggle',()=>{if(!dt.open||done)return;done=true;const go=el('button','ul-btn','Show '+a+' on map');go.type='button';go.style.margin='4px 0 6px';go.onclick=()=>{st.mapSel=a;dash.draw('ch-map');dash.draw('map-card');dash.draw('map-key');const m=document.querySelector('#atlas .ul-mapcard');if(m)m.scrollIntoView({behavior:'smooth',block:'start'});};dt.append(go);
+        L.slice().sort((x,y)=>String(x.project).localeCompare(String(y.project))).forEach(r=>dt.append(row(r)));});
+      list.append(dt);});};
+  q.oninput=render;render();parts.push(q,list);box.replaceChildren(...parts);});
 dash.draw('map-card',(box)=>{
   const a=st.mapSel; if(!a){box.replaceChildren(el('p','ul-note','Tap any circle on the map to see that area\'s prices, sales and projects here.'));return;}
   const p=prof(a)||{}; const pr=(rows('projects')||[]).filter(r=>r.area===a);
