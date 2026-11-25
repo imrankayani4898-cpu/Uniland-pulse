@@ -113,6 +113,10 @@ html,body{margin:0;background:var(--color-bg)} body{padding:14px} @media (max-wi
 .ul-mtile:hover{border-color:rgba(194,155,92,.6);box-shadow:0 14px 30px -18px rgba(194,155,92,.7);transform:translateY(-3px)}
 .ul-mtile:hover i{background:linear-gradient(135deg,#E3C998,#C29B5C);color:#121417}
 
+.ul-devpick{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px}.ul-devpick .ul-pick{flex:1 1 260px}
+.ul-devtop{margin:4px 0 16px}.ul-devtop button{font:inherit;font-size:12.5px;padding:7px 12px;border-radius:999px;border:1px solid var(--color-border-line);background:var(--color-bg);color:var(--color-fg);cursor:pointer}
+.ul-devtop button.on{background:#C29B5C;border-color:#C29B5C;color:#121417;font-weight:700}
+.ul-devst{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}.ul-devst button{font:inherit;font-size:12.5px;padding:7px 12px;border-radius:999px;border:1px solid var(--color-border-line);background:transparent;color:var(--color-fg);cursor:pointer}.ul-devst button.on{background:var(--color-fg);color:var(--color-bg)}
 /* pickers */
 .ul-pick{max-width:420px}
 .ul-vs{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;align-items:center;max-width:720px}
@@ -594,6 +598,7 @@ html.ul-client #ul-share{display:none!important}
     <a href="#atlas"><svg viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg><span>Dubai map</span></a>
     <a href="#explorer"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Area explorer</span></a>
     <a href="#compare"><svg viewBox="0 0 24 24"><rect x="4" y="9" width="5" height="11" rx="1"/><rect x="15" y="4" width="5" height="16" rx="1"/></svg><span>Compare</span></a>
+    <a href="#developers"><svg viewBox="0 0 24 24"><path d="M4 21V9l6-4v16M10 21V3l10 5v13M2 21h20M14 11h2M14 15h2M6 12h2M6 16h2"/></svg><span>Developers</span></a>
     <a href="#market"><svg viewBox="0 0 24 24"><path d="M3 20h18M5 16l4-5 4 3 6-8"/></svg><span>Market</span></a>
     <a href="#prices"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8M15 7h6v6"/></svg><span>Prices &amp; rents</span></a>
     <a href="#buyers"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg><span>Buyers</span></a>
@@ -655,6 +660,7 @@ html.ul-client #ul-share{display:none!important}
     <a class="ul-mtile" href="#atlas"><i><svg viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg></i><b>Dubai map</b><span>Every area, by price</span></a>
     <a class="ul-mtile" href="#explorer"><i><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></i><b>Area explorer</b><span>Projects, prices, yields</span></a>
     <a class="ul-mtile" href="#compare"><i><svg viewBox="0 0 24 24"><rect x="4" y="9" width="5" height="11" rx="1"/><rect x="15" y="4" width="5" height="16" rx="1"/></svg></i><b>Compare</b><span>Projects or areas side by side</span></a>
+    <a class="ul-mtile" href="#developers"><i><svg viewBox="0 0 24 24"><path d="M4 21V9l6-4v16M10 21V3l10 5v13M2 21h20M14 11h2M14 15h2M6 12h2M6 16h2"/></svg></i><b>Developers</b><span>One developer, every project</span></a>
     <a class="ul-mtile" href="#calc"><i><svg viewBox="0 0 24 24"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M8 7h8M8 11h1M12 11h1M8 15h1M12 15h1M16 15v3"/></svg></i><b>Calculators</b><span>Fees, mortgage, yield</span></a>
     <a class="ul-mtile" href="#market"><i><svg viewBox="0 0 24 24"><path d="M3 20h18M5 16l4-5 4 3 6-8"/></svg></i><b>Market</b><span>Trends &amp; top areas</span></a>
     <a class="ul-mtile" href="#buyers"><i><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></i><b>Buyers</b><span>Who to target</span></a>
@@ -778,6 +784,15 @@ html.ul-client #ul-share{display:none!important}
   <div class="ul-panel ul-noprint" id="ln-v" hidden>
     <div class="ul-card"><p class="ul-note">Videos play on YouTube. Type a project or area and press Enter.</p><input id="ul-vq" class="ul-in ul-big" type="search" placeholder="e.g. Palm Jebel Ali Nakheel" aria-label="Video search"><div class="ul-chips" data-draw="vid-chips" data-source="launches"></div></div>
   </div>
+</section>
+
+<!-- DEVELOPERS -->
+<section class="ul-tab" id="developers" hidden>
+  <div class="ul-head"><span class="ul-eyebrow">Developers</span><h2>One developer, every project</h2><p>Pick a developer to see all their projects on the market — prices, payment plans, handover dates and status — and send it as one report.</p></div>
+  <div class="ul-devpick"><div class="ul-pick"><select id="ul-dev" class="dash-select ul-big" data-draw="dv-sel" data-source="projects" aria-label="Choose developer"></select></div>
+  <div class="ul-pick"><select class="dash-select" data-draw="dv-area" data-source="projects" aria-label="Area"></select></div></div>
+  <div class="ul-chips ul-devtop" data-draw="dv-top" data-source="projects"></div>
+  <div data-draw="dv-view" data-source="projects"></div>
 </section>
 
 <!-- CALCULATORS -->
@@ -1307,6 +1322,61 @@ dash.draw('ex-proj',(box)=>{
   if(!L.length){box.replaceChildren(el('p','ul-note','No projects tracked here yet — new ones are added automatically as they launch.'));return;}
   box.replaceChildren(...L.map(r=>projCard(r)));
 });
+
+// ---------- developers ----------
+function devKey(s){return String(s||'').replace(/\b(properties|property|developers?|developments?|development|real estate|realestate|group|pjsc|llc|l\.l\.c|holdings?|holding|realty|co\.?|company)\b/gi,'').toLowerCase().replace(/[^a-z0-9]/g,'');}
+function devList(){const d=rows('projects')||[];const M=new Map();d.forEach(r=>{const k=devKey(r.developer);if(!k)return;let e=M.get(k);if(!e){e={k,names:{},n:0};M.set(k,e);}e.n++;e.names[r.developer]=(e.names[r.developer]||0)+1;});
+  return [...M.values()].map(e=>({k:e.k,n:e.n,name:Object.keys(e.names).sort((a,b)=>a.length-b.length)[0]})).sort((a,b)=>b.n-a.n||a.name.localeCompare(b.name));}
+function devRows(){const L=devList();if(!st.dev||!L.some(x=>x.k===st.dev))st.dev=L.length?L[0].k:null;const all=(rows('projects')||[]).filter(r=>devKey(r.developer)===st.dev);
+  return {L,dev:L.find(x=>x.k===st.dev),all,list:all.filter(r=>(!st.devArea||r.area===st.devArea)&&(!st.devSt||(r.status||'Not stated')===st.devSt))};}
+const QN=h=>{const m=String(h||'').match(/Q([1-4])\s*(\d{4})/);if(m)return +m[2]*10+ +m[1];const y=String(h||'').match(/(\d{4})/);return y?+y[1]*10+4:null;};
+function devSet(k){const go=()=>{st.dev=k;st.devArea='';st.devSt='';['dv-sel','dv-area','dv-top','dv-view'].forEach(n=>dash.draw(n));};if(window.ULnav)ULnav(go);else go();}
+dash.draw('dv-sel',(sel)=>{const L=devList();if(!L.length)return;devRows();sel.replaceChildren(...L.map(x=>{const o=new Option(x.name+' ('+x.n+' project'+(x.n>1?'s':'')+')',x.k);o.selected=x.k===st.dev;return o;}));sel.onchange=()=>devSet(sel.value);});
+dash.draw('dv-area',(sel)=>{const {all}=devRows();const A=[...new Set(all.map(r=>r.area))].sort();if(st.devArea&&!A.includes(st.devArea))st.devArea='';
+  sel.replaceChildren(new Option('All areas ('+A.length+')',''),...A.map(a=>{const o=new Option(a+' ('+all.filter(r=>r.area===a).length+')',a);o.selected=a===st.devArea;return o;}));sel.onchange=()=>{st.devArea=sel.value;dash.draw('dv-view');};});
+dash.draw('dv-top',(box)=>{const L=devList().slice(0,14);box.replaceChildren(el('span','ul-note','Quick pick:'),...L.map(x=>{const b=el('button',x.k===st.dev?'on':null,x.name);b.type='button';b.onclick=()=>devSet(x.k);return b;}));});
+function devStats(list){const pr=list.filter(r=>+r.launch_price_aed>0).sort((a,b)=>a.launch_price_aed-b.launch_price_aed);const hq=list.map(r=>({r,q:QN(r.handover)})).filter(x=>x.q).sort((a,b)=>a.q-b.q);
+  const plans={};list.forEach(r=>{const m=String(r.payment_plan||'').match(/^(\d+(?:\/\d+)+)/);if(m)plans[m[1]]=(plans[m[1]]||0)+1;});const pl=Object.entries(plans).sort((a,b)=>b[1]-a[1]);
+  const stc={};list.forEach(r=>{const k=r.status||'Not stated';stc[k]=(stc[k]||0)+1;});
+  const areas=[...new Set(list.map(r=>r.area))];return {pr,hq,pl,stc,areas};}
+function devAreaRows(list){const A=[...new Set(list.map(r=>r.area))];return A.map(a=>{const L=list.filter(r=>r.area===a);const ps=L.map(r=>+r.launch_price_aed).filter(v=>v>0);const qs=L.map(r=>({h:r.handover,q:QN(r.handover)})).filter(x=>x.q).sort((x,y)=>x.q-y.q);
+  return {a,n:L.length,from:ps.length?Math.min(...ps):null,h:qs.length?(qs[0].h===qs[qs.length-1].h?qs[0].h:qs[0].h+' – '+qs[qs.length-1].h):'—'};}).sort((x,y)=>y.n-x.n||x.a.localeCompare(y.a));}
+dash.draw('dv-view',(box)=>{const d=rows('projects');if(!d){box.replaceChildren(el('p','ul-note','Loading…'));return;}
+  const {dev,all,list}=devRows();if(!dev){box.replaceChildren(el('p','ul-note','No developers yet.'));return;}
+  const S=devStats(list);const w=el('div');
+  const sb=el('div','ul-devst');const stAll=['',...['Off-plan','Under construction','Ready','Sold out','Not stated'].filter(k=>all.some(r=>(r.status||'Not stated')===k))];
+  stAll.forEach(k=>{const n=k?all.filter(r=>(!st.devArea||r.area===st.devArea)&&(r.status||'Not stated')===k).length:all.filter(r=>!st.devArea||r.area===st.devArea).length;const b=el('button',(st.devSt||'')===k?'on':null,(k||'All')+' ('+n+')');b.type='button';b.onclick=()=>{st.devSt=k;dash.draw('dv-view');};sb.append(b);});
+  w.append(sb);
+  const T=el('div','ul-tiles');
+  T.append(tile('Projects',fmt(list.length,'n0'),S.areas.length+' area'+(S.areas.length===1?'':'s')));
+  if(S.pr.length)T.append(tile('Prices from',aed(+S.pr[0].launch_price_aed),S.pr[0].project));
+  if(S.pr.length>1)T.append(tile('Highest starting price',aed(+S.pr[S.pr.length-1].launch_price_aed),S.pr[S.pr.length-1].project));
+  if(S.hq.length)T.append(tile('Handover',S.hq[0].r.handover===S.hq[S.hq.length-1].r.handover?S.hq[0].r.handover:S.hq[0].r.handover+' – '+S.hq[S.hq.length-1].r.handover,'earliest – latest'));
+  if(S.pl.length)T.append(tile('Most used payment plan',S.pl[0][0],S.pl[0][1]+' of '+list.length+' projects'+(S.pl[1]?' · next: '+S.pl[1][0]:'')));
+  const stx=Object.entries(S.stc).sort((a,b)=>b[1]-a[1]);if(stx.length)T.append(tile('Status',stx[0][1]+' '+stx[0][0].toLowerCase(),stx.slice(1).map(([k,v])=>v+' '+k.toLowerCase()).join(' · ')));
+  w.append(T);
+  const act=el('div','ul-actions');act.style.margin='14px 0';if(window.ULsendBtn)act.append(ULsendBtn('Send '+dev.name+' report',()=>{if(window.ULopenSpec)ULopenSpec(devSpec());}));w.append(act);
+  if(!list.length){w.append(el('p','ul-note','No projects match this filter.'));box.replaceChildren(w);return;}
+  if(S.areas.length>1){const c=el('div','ul-card');c.append(el('h3',null,'Projects by area'));c.append(mtab(devAreaRows(list).map(x=>({Area:x.a,Projects:x.n,'Prices from':x.from?aed(x.from):'—',Handover:x.h}))));w.append(c);}
+  const g=el('div','ul-pgrid');[...list].sort((a,b)=>(QN(a.handover)||99999)-(QN(b.handover)||99999)||(+a.launch_price_aed||9e9)-(+b.launch_price_aed||9e9)).forEach(r=>{const c=projCard(r);if(r.status){const tg=c.querySelector('.ul-tags');if(tg)tg.append(el('span',null,r.status));}g.append(c);});
+  w.append(el('h3','ul-h2s','All projects ('+list.length+')'),g);
+  w.append(el('p','ul-note','From Bayut, Property Finder, developer websites and other listing sites. Starting prices are launch prices; availability changes. Blank fields mean the developer has not published them.'));
+  box.replaceChildren(w);});
+function devSpec(){const {dev,list}=devRows();if(!dev)return null;const S=devStats(list);const T=[];const t=(l,v,s,hi)=>{if(v)T.push({l,v,s,hi});};
+  t('Projects',fmt(list.length,'n0'),S.areas.length+' area'+(S.areas.length===1?'':'s'),true);
+  t('Prices from',S.pr.length?aed(+S.pr[0].launch_price_aed):null,S.pr.length?S.pr[0].project.slice(0,30):'',true);
+  t('Handover',S.hq.length?(S.hq[0].r.handover===S.hq[S.hq.length-1].r.handover?S.hq[0].r.handover:S.hq[0].r.handover+' – '+S.hq[S.hq.length-1].r.handover):null,'earliest – latest');
+  t('Most used plan',S.pl.length?S.pl[0][0]:null,S.pl.length?S.pl[0][1]+' of '+list.length+' projects':'');
+  const stx=Object.entries(S.stc).sort((a,b)=>b[1]-a[1]);t('Off-plan',S.stc['Off-plan']?String(S.stc['Off-plan']):null,'projects selling off-plan');
+  t('Ready / handed over',S.stc['Ready']?String(S.stc['Ready']):null,'since 2025');
+  const sec=[];const AR=devAreaRows(list);
+  if(AR.length>1)sec.push({h:'Projects by area',head:['Area','Projects','From','Handover'],cols:[.36,.14,.22,.28],rows:AR.slice(0,40).map(x=>[x.a.length>24?x.a.slice(0,23)+'…':x.a,String(x.n),x.from?aed(x.from):'—',x.h])});
+  const P=[...list].sort((a,b)=>a.area.localeCompare(b.area)||(+a.launch_price_aed||9e9)-(+b.launch_price_aed||9e9)).slice(0,300);
+  const cut=(s,n)=>{s=String(s||'');return s.length>n?s.slice(0,n-1)+'…':s;};
+  sec.push({h:'All projects'+(list.length>300?' (first 300 of '+list.length+')':' ('+list.length+')'),tall:1,cols:[.6,.4],rows:P.map(r=>[[cut(r.project,34),cut([r.area,r.handover?'Handover '+r.handover:'',r.units].filter(Boolean).join(' · '),46)],[r.launch_price_aed?'From '+aed(+r.launch_price_aed):'Price on request',cut([r.payment_plan?'Plan '+String(r.payment_plan).split(' (')[0]:'',r.status||''].filter(Boolean).join(' · '),28)]])});
+  const filt=[st.devArea,st.devSt].filter(Boolean).join(' · ');
+  return {kicker:'Developer report',title:dev.name,sub:(filt?filt+' · ':'')+list.length+' project'+(list.length===1?'':'s')+' on the market',tiles:T.slice(0,6),sections:sec,maxH:32000,file:'Uniland '+dev.name+' projects',text:dev.name+' – '+list.length+' projects on the market'+(S.pr.length?', prices from '+aed(+S.pr[0].launch_price_aed):'')+'. From Uniland Market Pulse.'};}
+window.ULdevSpec=devSpec;
 function mtab(L){const w=el('div','ul-tw');const tb=el('table','ul-cmpt');const ks=Object.keys(L[0]||{});const hd=el('tr');ks.forEach(k=>hd.append(el('th',null,k)));tb.append(hd);L.forEach(r=>{const tr=el('tr');ks.forEach(k=>tr.append(el('td',null,r[k])));tb.append(tr);});w.append(tb);return w;}
 dash.draw('ex-bedch',(box)=>{
   const d=rows('bedrooms'); if(!d){UL.ph(box,dash.data('bedrooms').status);return;}
@@ -1748,8 +1818,8 @@ function rr(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.arcTo(x+w,y,x+w
 const SANS='"Inter","Segoe UI",Roboto,Arial,sans-serif', SERIF='Georgia,"Times New Roman",serif';
 
 function render(spec){
-  const W=1080,P=64; const c=document.createElement('canvas'); c.width=W; c.height=12000; const x=c.getContext('2d');
-  x.fillStyle=CREAM;x.fillRect(0,0,W,12000);
+  const W=1080,P=64; const c=document.createElement('canvas'); const MH=spec.maxH||12000; c.width=W; c.height=MH; const x=c.getContext('2d');
+  x.fillStyle=CREAM;x.fillRect(0,0,W,MH);
   // header band
   x.fillStyle=INK;x.fillRect(0,0,W,300);
   x.strokeStyle=GOLD;x.lineWidth=4;x.beginPath();x.moveTo(P+18,58);x.lineTo(P+18,120);x.stroke();
