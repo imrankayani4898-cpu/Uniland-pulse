@@ -436,6 +436,7 @@ details.ul-more[open]>summary{margin-bottom:10px}
 
 .ul-scale b{color:#fff;font-size:14px}
 .ul-scale span{color:#E3C998}
+.ul-mapleg{flex-basis:100%;display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin-top:8px;padding:10px 12px;border-radius:12px;background:rgba(18,20,23,.55);border:1px solid rgba(194,155,92,.35);font-size:12.5px}.ul-mapleg b{color:#fff!important;font-size:12.5px!important}.ul-mapleg span{color:#F1E9DC!important;display:inline-flex;align-items:center;gap:6px}.ul-mapleg em{display:inline-block;width:13px;height:13px;border-radius:50%;border:1px solid rgba(255,255,255,.5)}.ul-mapleg .ul-mapleg-n,.ul-mapleg .ul-mapleg-t{color:#C9C2B6!important}
 .ul-scale .ul-lg{margin-left:auto;background:transparent;color:#C9C2B6;border-color:rgba(241,233,220,.2)}
 .ul-mapinfo h3{font-size:24px;margin-top:2px}
 
@@ -693,7 +694,7 @@ html.ul-client #ul-share{display:none!important}
     <div class="ul-card"><p class="ul-note">Agencies with live listings here. DLD doesn't publish sales by agency.</p><div class="ul-bgrid" data-draw="ex-brokers" data-source="brokers"></div></div>
   </div>
   <div class="ul-panel" id="ex-mp" hidden>
-    <div class="ul-card ul-mapcard"><div class="ul-mapwrap" data-zk="ex"><div class="ul-chart" data-draw="ex-map" data-source="area_geo area_profile" style="min-height:360px"></div><div class="ul-mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" aria-label="Reset map">⟲</button></div></div></div>
+    <div class="ul-card ul-mapcard"><div class="ul-mapwrap" data-zk="ex"><div class="ul-chart" data-draw="ex-map" data-source="area_geo area_profile" style="min-height:360px"></div><div class="ul-mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" aria-label="Reset map">⟲</button></div></div><div class="ul-scale" data-draw="ex-key" data-source="area_profile"></div></div>
   </div>
 </section>
 
@@ -1087,7 +1088,7 @@ window.addEventListener('afterprint',()=>{document.querySelectorAll('details.ul-
 })();
 </script>
 <script>const {st,C,fmt,aed,rows,el,link}=UL;
-const AREA_DRAWS=['sel-area','ex-name','ex-tiles','ex-bars','ex-proj','ex-bedch','ex-brokers','ex-map','ch-areas','calc-out','ex-yoy'];
+const AREA_DRAWS=['sel-area','ex-name','ex-tiles','ex-bars','ex-proj','ex-bedch','ex-brokers','ex-map','ex-key','ch-areas','calc-out','ex-yoy'];
 function setAreaRaw(a){st.area=a;AREA_DRAWS.forEach(n=>dash.draw(n));}
 window.setAreaRaw=setAreaRaw;
 function setArea(a){if(a===st.area)return;if(window.ULnav)ULnav(()=>setAreaRaw(a));else setAreaRaw(a);}
@@ -1237,7 +1238,10 @@ dash.draw('sel-mapyr',(sel)=>{const ys=[...new Set((rows('area_years')||[]).map(
   sel.onchange=()=>{st.mapYr=sel.value;document.querySelectorAll('#atlas .ul-sub').forEach(x=>x.style.display=st.mapYr==='latest'?'':'none');dash.draw('ch-map');dash.draw('map-key');dash.draw('map-card');};});
 dash.draw('ch-map',(box)=>drawMap(box,st.map,null,Math.max(420,Math.min(620,(box.clientWidth||600)*0.75)),'at'));
 dash.draw('ex-map',(box)=>{st.mapT_ex=null;drawMap(box,'ready',st.area,Math.max(340,Math.min(520,(box.clientWidth||600)*0.7)),'ex');});
-dash.draw('map-key',(box)=>{const P=rows('area_profile')||[];const YR=mapYr('at');
+function mapLegend(mode){const w=el('div','ul-mapleg');const it=(c,t)=>{const s=el('span');const i=el('em');i.style.background=c;s.append(i,document.createTextNode(t));return s;};const y=mode==='yield';const lo=y?'lower yield':'lower price',hi=y?'higher yield':'higher price';w.append(el('b',null,'Circle colour:'),it('#3E6A93','Blue = '+lo),(()=>{const s=el('span');["#8FA9B8","#E3C998"].forEach(c=>{const i=el('em');i.style.background=c;s.append(i);});s.append(document.createTextNode('Light blue / light gold = in between'));return s;})(),it('#C29B5C','Gold = '+hi),it('rgba(150,150,150,.45)','Grey = no figure yet'),el('span','ul-mapleg-n','Bigger circle = more sales · gold ring = selected area'));return w;}
+dash.draw('ex-key',(box)=>{box.replaceChildren(mapLegend('ready'));box.firstChild.prepend(el('span','ul-mapleg-t','Secondary price per sq ft ·'));});
+dash.draw('map-key',(box)=>{mapKeyInner(box);box.append(mapLegend(mapYr('at')?'ready':st.map));});
+function mapKeyInner(box){const P=rows('area_profile')||[];const YR=mapYr('at');
   if(YR){const L=PRlist(YR);
     const clr=()=>{const c=el('button','ul-lg','✕ Clear');c.type='button';c.onclick=()=>{st.mapSel=null;dash.draw('ch-map');dash.draw('map-card');dash.draw('map-key');};return c;};
     if(st.mapSel){const a=PR(st.mapSel,YR);box.replaceChildren(el('b',null,'📍 '+st.mapSel),el('span',null,a&&a.psf!=null?a.period+': AED '+fmt(a.psf,'n0')+' / sq ft':'No published figure for this area in this period'),el('span',null,a&&a.n?'· '+fmt(a.n,'n0')+' sales':''),clr());return;}
@@ -1250,7 +1254,7 @@ dash.draw('map-key',(box)=>{const P=rows('area_profile')||[];const YR=mapYr('at'
     box.replaceChildren(b,el('span',null,val),el('span',null,n?'· '+fmt(n,'n0')+' sales Jul–Oct':''),clr);return;}
 const vals=P.map(p=>metricOf(p,st.map)).filter(v=>v!=null);
   if(!vals.length){box.replaceChildren();return;} const e=d3.extent(vals); const f=st.map==='yield'?(v=>fmt(v,'n1')+'%'):(v=>'AED '+fmt(v,'n0'));
-  box.replaceChildren(el('span',null,f(e[0])),el('i'),el('span',null,f(e[1])+(st.map==='yield'?' gross yield':' / sq ft')),el('span',null,'· circle size = sales Jul–Oct'));});
+  box.replaceChildren(el('span',null,f(e[0])),el('i'),el('span',null,f(e[1])+(st.map==='yield'?' gross yield':' / sq ft')),el('span',null,'· circle size = sales Jul–Oct'));}
 document.addEventListener('click',(e)=>{const b=e.target.closest?e.target.closest('.ul-sub button[data-sub^="at-"]'):null; if(!b) return;
   st.map={'at-ready':'ready','at-off':'off','at-yield':'yield'}[b.getAttribute('data-sub')]||'ready'; dash.draw('ch-map'); dash.draw('map-key');});
 
