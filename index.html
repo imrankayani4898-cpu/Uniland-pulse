@@ -669,11 +669,11 @@ html.ul-client #ul-share{display:none!important}
 
 <!-- MAP -->
 <section class="ul-tab" id="atlas" hidden>
-  <div class="ul-head"><span class="ul-eyebrow">Dubai map</span><h2>Every area at a glance</h2><p>Drag to move, pinch or use + / − to zoom. Tap an area to see its sales and prices.</p></div>
+  <div class="ul-head"><span class="ul-eyebrow">Dubai &amp; UAE map</span><h2>Every area at a glance</h2><p>Drag to move, pinch or use + / − to zoom. Tap an area to see its sales and prices.</p></div>
   <div class="ul-pick"><select class="dash-select" data-draw="sel-mapyr" data-source="area_years area_periods area_prices" aria-label="Year"></select></div>
   <div class="ul-sub" role="tablist"><button type="button" class="on" data-sub="at-ready">Secondary price</button><button type="button" data-sub="at-off">Off-plan price</button><button type="button" data-sub="at-yield">Rental yield</button></div>
   <div class="ul-card ul-mapcard">
-    <div class="ul-mapwrap" data-zk="at"><div class="ul-chart" data-draw="ch-map" data-source="area_geo area_profile" style="min-height:420px"></div><div class="ul-mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" aria-label="Reset map">⟲</button></div></div>
+    <div class="ul-mapwrap" data-zk="at"><div class="ul-chart" data-draw="ch-map" data-source="area_geo area_profile" style="min-height:520px"></div><div class="ul-mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" aria-label="Show Dubai">⟲</button><button type="button" data-z="uae" aria-label="Show whole UAE" style="font-size:10.5px;font-weight:700">UAE</button></div></div>
     <div class="ul-scale" data-draw="map-key" data-source="area_profile area_years area_periods"></div>
   </div>
   <div class="ul-card ul-mapinfo" data-draw="map-card" data-source="area_profile projects area_years area_periods"></div>
@@ -700,7 +700,7 @@ html.ul-client #ul-share{display:none!important}
     <div class="ul-card"><p class="ul-note">Agencies with live listings here. DLD doesn't publish sales by agency.</p><div class="ul-bgrid" data-draw="ex-brokers" data-source="brokers"></div></div>
   </div>
   <div class="ul-panel" id="ex-mp" hidden>
-    <div class="ul-card ul-mapcard"><div class="ul-mapwrap" data-zk="ex"><div class="ul-chart" data-draw="ex-map" data-source="area_geo area_profile" style="min-height:360px"></div><div class="ul-mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" aria-label="Reset map">⟲</button></div></div><div class="ul-scale" data-draw="ex-key" data-source="area_profile"></div></div>
+    <div class="ul-card ul-mapcard"><div class="ul-mapwrap" data-zk="ex"><div class="ul-chart" data-draw="ex-map" data-source="area_geo area_profile" style="min-height:360px"></div><div class="ul-mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" aria-label="Show Dubai">⟲</button><button type="button" data-z="uae" aria-label="Show whole UAE" style="font-size:10.5px;font-weight:700">UAE</button></div></div><div class="ul-scale" data-draw="ex-key" data-source="area_profile"></div></div>
   </div>
 </section>
 
@@ -1162,7 +1162,10 @@ dash.draw('sel-proj',(sel)=>{
 });
 
 // ---------- in-house Dubai map ----------
-const COAST=[[24.60,54.70],[24.86,54.93],[24.93,54.99],[24.98,55.03],[25.03,55.08],[25.07,55.12],[25.09,55.14],[25.12,55.17],[25.15,55.195],[25.19,55.23],[25.22,55.25],[25.245,55.265],[25.27,55.285],[25.29,55.31],[25.31,55.34],[25.34,55.385],[25.50,55.60]];
+const COAST=[[24.40,51.58],[24.05,51.78],[24.17,52.62],[24.10,53.45],[24.22,53.95],[24.47,54.33],[24.55,54.43],[24.62,54.70],[24.86,54.93],[24.93,54.99],[24.98,55.03],[25.03,55.08],[25.07,55.12],[25.09,55.14],[25.12,55.17],[25.15,55.195],[25.19,55.23],[25.22,55.25],[25.245,55.265],[25.27,55.285],[25.29,55.31],[25.31,55.34],[25.34,55.385],[25.36,55.39],[25.42,55.44],[25.57,55.55],[25.65,55.70],[25.79,55.94],[25.95,56.03],[26.05,56.08]];
+const ECOAST=[[25.63,56.27],[25.50,56.36],[25.30,56.37],[25.12,56.35],[25.00,56.37],[24.90,56.40]];
+const EMIR=[['Abu Dhabi',24.15,54.70],['Dubai',24.90,55.42],['Sharjah',25.22,55.66],['Ajman',25.36,55.60],['Umm Al Quwain',25.47,55.80],['Ras Al Khaimah',25.62,56.00],['Fujairah',25.35,56.17]];
+const UAEBOX={lat0:24.0,lat1:26.1,lon0:51.5,lon1:56.45};
 const CREEK=[[25.272,55.300],[25.255,55.322],[25.232,55.336],[25.212,55.345],[25.192,55.352]];
 const SZR=[[24.93,55.07],[25.00,55.12],[25.06,55.16],[25.11,55.20],[25.16,55.24],[25.20,55.27],[25.23,55.29]];
 const RAMP=['#3E6A93','#8FA9B8','#E3C998','#C29B5C'];
@@ -1184,17 +1187,20 @@ function drawMap(box,metric,hl,H,key){
   const {svg,W}=UL.svgOf(box,H,'Map of Dubai areas coloured by '+(metric==='off'?'off-plan price':metric==='yield'?'rental yield':'secondary price')+'. Drag to move, pinch or use + and − to zoom, tap an area for details.');
   svg.style('touch-action','none').style('cursor','grab');
   const la=g.map(r=>r.lat), lo=g.map(r=>r.lon), k=Math.cos(25.1*Math.PI/180);
-  let lat0=Math.min(...la)-.025, lat1=Math.max(...la)+.03, lon0=Math.min(...lo)-.03, lon1=Math.max(...lo)+.03;
+  let lat0=Math.min(UAEBOX.lat0,...la)-.025, lat1=Math.max(UAEBOX.lat1,...la)+.03, lon0=Math.min(UAEBOX.lon0,...lo)-.03, lon1=Math.max(UAEBOX.lon1,...lo)+.03;
   const s=Math.min((W-20)/((lon1-lon0)*k),(H-20)/(lat1-lat0));
   const ox=(W-(lon1-lon0)*k*s)/2, oy=(H-(lat1-lat0)*s)/2;
   const X=lon=>ox+(lon-lon0)*k*s, Y=lat=>oy+(lat1-lat)*s;
   const root=svg.append('g');
   const line=d3.line().x(d=>X(d[1])).y(d=>Y(d[0])).curve(d3.curveCatmullRom);
-  root.append('path').attr('d',line(COAST)+`L${X(55.9)},${Y(25.9)}L${X(54.2)},${Y(25.9)}L${X(54.2)},${Y(24.5)}Z`).style('fill','rgba(91,134,176,.10)');
+  root.append('path').attr('d',line(COAST)+`L${X(56.2)},${Y(26.7)}L${X(51.2)},${Y(26.7)}L${X(51.2)},${Y(24.40)}Z`).style('fill','rgba(91,134,176,.10)');
+  root.append('path').attr('d',line(ECOAST)+`L${X(57)},${Y(24.9)}L${X(57)},${Y(25.63)}Z`).style('fill','rgba(91,134,176,.10)');
+  root.append('path').attr('class','ul-line').attr('d',line(ECOAST)).style('fill','none').style('stroke','rgba(194,155,92,.55)').attr('stroke-width',1.4).attr('vector-effect','non-scaling-stroke');
+  const emir=root.append('g').selectAll('text').data(EMIR).join('text').attr('x',d=>X(d[2])).attr('y',d=>Y(d[1])).style('fill','rgba(241,233,220,.22)').style('font-weight','700').style('letter-spacing','.08em').style('pointer-events','none').attr('text-anchor','middle').text(d=>d[0].toUpperCase());
   root.append('path').attr('class','ul-line').attr('pathLength',1).attr('d',line(COAST)).style('fill','none').style('stroke','rgba(194,155,92,.55)').attr('stroke-width',1.4).attr('vector-effect','non-scaling-stroke');
   root.append('path').attr('class','ul-line').attr('pathLength',1).attr('d',line(CREEK)).style('fill','none').style('stroke','rgba(91,134,176,.6)').attr('stroke-width',3).attr('stroke-linecap','round').attr('vector-effect','non-scaling-stroke');
   root.append('path').attr('d',line(SZR)).style('fill','none').style('stroke','rgba(241,233,220,.18)').attr('stroke-width',1.2).attr('stroke-dasharray','5 5').attr('vector-effect','non-scaling-stroke');
-  const sea=root.append('text').attr('x',X(lon0+.04)).attr('y',Y(lat1-.05)).style('font-style','italic').style('fill','rgba(143,169,184,.7)').text('Arabian Gulf');
+  const sea=root.append('text').attr('x',X(53.2)).attr('y',Y(25.3)).style('font-style','italic').style('fill','rgba(143,169,184,.7)').text('Arabian Gulf');
   const szr=root.append('text').attr('x',X(55.215)).attr('y',Y(25.135)).attr('transform',`rotate(-38 ${X(55.215)} ${Y(25.135)})`).style('fill','rgba(241,233,220,.35)').text('Sheikh Zayed Rd');
   const YR=mapYr(key); if(YR) metric='ready';
   const data=g.map(r=>{const p=P.find(q=>q.area===r.area)||{};if(YR){const a=PR(r.area,YR)||{};return {...r,p,v:a.psf??null,n:+a.n||0};}return {...r,p,v:metricOf(p,metric),n:(+p.ready_sales||0)+(+p.offplan_sales||0)};});
@@ -1222,24 +1228,26 @@ function drawMap(box,metric,hl,H,key){
   });
   function relabel(kz){
     const boxes=[];
-    pins.selectAll('g.ul-pin').each(function(d){const gp=d3.select(this),sel=d.area===pick;const r=R(d)/Math.sqrt(kz);
+    const z=kz/(typeof hk==='number'?hk:1);pins.selectAll('g.ul-pin').each(function(d){const gp=d3.select(this),sel=d.area===pick;const r=(z>=1?R(d)*Math.sqrt(z):R(d)*Math.max(z,.25))/kz;
       gp.select('circle.h').attr('r',r);gp.select('circle.hit').attr('r',r+10/kz);gp.select('circle.ring').attr('r',r+7/kz);
       const fs=(sel?12:10.5)/kz, x=X(d.lon)+r+4/kz, y=Y(d.lat);
       const w=d.area.length*(sel?7:6)/kz, bx=[x,y-7/kz,x+w,y+7/kz];
-      const big=d.n/nmax>.04||kz>1.6||sel;
+      const big=(d.n/nmax>.04&&z>.6)||z>1.6||sel;
       const free=sel||(big&&!boxes.some(b=>!(bx[2]<b[0]||bx[0]>b[2]||bx[3]<b[1]||bx[1]>b[3])));
       if(free)boxes.push(bx);
       gp.select('text.lab').attr('x',x).style('font-size',fs+'px').style('display',free?null:'none');});
-    sea.style('font-size',(13/kz)+'px');szr.style('font-size',(10/kz)+'px');
+    sea.style('font-size',(13/kz)+'px');emir.style('font-size',(Math.max(9,15/Math.sqrt(kz))/kz)+'px');szr.style('font-size',(10/kz)+'px');
   }
-  const zoom=d3.zoom().scaleExtent([1,8]).translateExtent([[0,0],[W,H]]).on('zoom',(e)=>{root.attr('transform',e.transform);relabel(e.transform.k);st['mapT_'+key]=e.transform;})
+  const dub=data.filter(d=>!d.emirate||d.emirate==='Dubai');const bx0=d3.min(dub,d=>X(d.lon))-25,bx1=d3.max(dub,d=>X(d.lon))+90,by0=d3.min(dub,d=>Y(d.lat))-25,by1=d3.max(dub,d=>Y(d.lat))+25;
+  const hk=Math.max(1,Math.min(W/(bx1-bx0),H/(by1-by0)));const HOME=d3.zoomIdentity.translate(W/2,H/2).scale(hk).translate(-(bx0+bx1)/2,-(by0+by1)/2);
+  const zoom=d3.zoom().scaleExtent([1,Math.max(12,hk*10)]).translateExtent([[0,0],[W,H]]).on('zoom',(e)=>{root.attr('transform',e.transform);relabel(e.transform.k);st['mapT_'+key]=e.transform;})
     .on('start',()=>svg.style('cursor','grabbing')).on('end',()=>svg.style('cursor','grab'));
   svg.call(zoom).on('dblclick.zoom',null);
   const t0=st['mapT_'+key];
-  if(t0) svg.call(zoom.transform,t0); else relabel(1);
-  if(key==='ex'&&hl&&!t0){const d=data.find(q=>q.area===hl);if(d)svg.call(zoom.transform,d3.zoomIdentity.translate(W/2,H/2).scale(2.5).translate(-X(d.lon),-Y(d.lat)));}
+  if(t0) svg.call(zoom.transform,t0); else svg.call(zoom.transform,HOME);
+  if(key==='ex'&&hl&&!t0){const d=data.find(q=>q.area===hl);if(d)svg.call(zoom.transform,d3.zoomIdentity.translate(W/2,H/2).scale(hk*2.5).translate(-X(d.lon),-Y(d.lat)));}
   window.ULzoom=window.ULzoom||{};
-  window.ULzoom[key]={in:()=>svg.transition().duration(300).call(zoom.scaleBy,1.6),out:()=>svg.transition().duration(300).call(zoom.scaleBy,1/1.6),reset:()=>svg.transition().duration(400).call(zoom.transform,d3.zoomIdentity)};
+  window.ULzoom[key]={in:()=>svg.transition().duration(300).call(zoom.scaleBy,1.6),out:()=>svg.transition().duration(300).call(zoom.scaleBy,1/1.6),reset:()=>svg.transition().duration(400).call(zoom.transform,HOME),uae:()=>svg.transition().duration(500).call(zoom.transform,d3.zoomIdentity)};
 }
 dash.draw('sel-mapyr',(sel)=>{const ys=[...new Set((rows('area_years')||[]).map(r=>r.year))].filter(y=>y<new Date().getFullYear()).sort((a,b)=>b-a);
   const ps=[...new Map((rows('area_periods')||[]).filter(r=>/-q\d$/.test(r.period_id)).map(r=>[r.period_id,r.period])).entries()].sort((a,b)=>b[0].localeCompare(a[0]));
@@ -1251,8 +1259,8 @@ dash.draw('sel-mapyr',(sel)=>{const ys=[...new Set((rows('area_years')||[]).map(
   sel.replaceChildren(new Option('Latest ('+lp+')','latest'),...grp);
   if(st.mapYr&&![...sel.options].some(o=>o.value===String(st.mapYr)))st.mapYr='latest';sel.value=String(st.mapYr||'latest');
   sel.onchange=()=>{st.mapYr=sel.value;document.querySelectorAll('#atlas .ul-sub').forEach(x=>x.style.display=st.mapYr==='latest'?'':'none');dash.draw('ch-map');dash.draw('map-key');dash.draw('map-card');};});
-dash.draw('ch-map',(box)=>drawMap(box,st.map,null,Math.max(420,Math.min(620,(box.clientWidth||600)*0.75)),'at'));
-dash.draw('ex-map',(box)=>{st.mapT_ex=null;drawMap(box,'ready',st.area,Math.max(340,Math.min(520,(box.clientWidth||600)*0.7)),'ex');});
+dash.draw('ch-map',(box)=>drawMap(box,st.map,null,Math.round(Math.max(520,Math.min(Math.max(560,innerHeight*0.82),(box.clientWidth||600)*0.9))),'at'));
+dash.draw('ex-map',(box)=>{st.mapT_ex=null;drawMap(box,'ready',st.area,Math.round(Math.max(420,Math.min(Math.max(480,innerHeight*0.7),(box.clientWidth||600)*0.8))),'ex');});
 function mapLegend(mode){const w=el('div','ul-mapleg');const it=(c,t)=>{const s=el('span');const i=el('em');i.style.background=c;s.append(i,document.createTextNode(t));return s;};const y=mode==='yield';const lo=y?'lower yield':'lower price',hi=y?'higher yield':'higher price';w.append(el('b',null,'Circle colour:'),it('#3E6A93','Blue = '+lo),(()=>{const s=el('span');["#8FA9B8","#E3C998"].forEach(c=>{const i=el('em');i.style.background=c;s.append(i);});s.append(document.createTextNode('Light blue / light gold = in between'));return s;})(),it('#C29B5C','Gold = '+hi),it('rgba(150,150,150,.45)','Grey = no figure yet'),el('span','ul-mapleg-n','Bigger circle = more sales · gold ring = selected area'));return w;}
 dash.draw('ex-key',(box)=>{box.replaceChildren(mapLegend('ready'));box.firstChild.prepend(el('span','ul-mapleg-t','Secondary price per sq ft ·'));});
 dash.draw('map-key',(box)=>{mapKeyInner(box);box.append(mapLegend(mapYr('at')?'ready':st.map));});
