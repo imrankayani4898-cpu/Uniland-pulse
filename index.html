@@ -2184,8 +2184,8 @@ function weekly(){
   if(pulse.length)S.push({h:'Week by week (DLD)',head:['Week','All deals','Sales','Mortgages'],cols:[.4,.2,.2,.2],rows:pulse.map(r=>[r.period||'',r.total_bn!=null?'AED '+r.total_bn+'bn':'—',r.sales_bn!=null?'AED '+r.sales_bn+'bn':'—',r.mortgages_bn!=null?'AED '+r.mortgages_bn+'bn':'—'])});
   const ms=rows('market_split').slice().sort((a,b)=>a.id<b.id?1:-1).slice(0,6);
   if(ms.length)S.push({h:'Monthly sales',head:['Month','Off-plan','Secondary','Total'],cols:[.31,.23,.23,.23],rows:ms.map(r=>[r.label,'AED '+r.offplan_bn+'bn','AED '+r.secondary_bn+'bn','AED '+r.total_bn+'bn'])});
-  const rb=rows('rent_beds').filter(r=>r.bedrooms==='1 BR'&&r.rent_yoy_pct!=null).sort((a,b)=>a.area.localeCompare(b.area)).slice(0,10);
-  if(rb.length)S.push({h:'1-bed rents now vs a year ago',head:['Area','Average rent','Change'],cols:[.44,.3,.26],rows:rb.map(r=>[r.area,'AED '+Math.round(r.avg_rent_aed).toLocaleString('en'),(r.rent_yoy_pct>=0?'+':'')+r.rent_yoy_pct+'%'])});
+  const BO=['Studio','1 BR','2 BR','3 BR','4 BR','5 BR','6 BR','7 BR'],bi=b=>{const i=BO.indexOf(b);return i<0?99:i;};const rb=rows('rent_beds').filter(r=>r.bedrooms!=='All'&&r.rent_yoy_pct!=null&&r.avg_rent_aed!=null).sort((a,b)=>a.area.localeCompare(b.area)||bi(a.bedrooms)-bi(b.bedrooms));
+  if(rb.length)S.push({h:'Rents by bedroom now vs a year ago',head:['Area','Type','Average rent','Change'],cols:[.36,.18,.26,.2],rows:rb.map((r,i)=>[i&&rb[i-1].area===r.area?'':r.area,r.bedrooms,'AED '+Math.round(r.avg_rent_aed).toLocaleString('en'),(r.rent_yoy_pct>=0?'+':'')+r.rent_yoy_pct+'%'])});
   const la=rows('launches').slice(0,5);if(la.length)S.push({h:'New launches',lines:la.map(r=>(r.project||'')+(r.developer?' – '+r.developer:'')+(r.area?', '+r.area:'')+(r.detail?': '+r.detail:''))});
   const nw=rows('news').slice(0,5);if(nw.length)S.push({h:'Headlines',lines:nw.map(r=>(r.date?r.date+' · ':'')+r.headline)});
   const wk=pulse[0]&&pulse[0].period?pulse[0].period.replace(/^Week\s*/,''):'';
