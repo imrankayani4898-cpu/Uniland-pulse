@@ -460,10 +460,10 @@ details.ul-more[open]>summary{margin-bottom:10px}
 .ul-send{background:#1f8f4e;color:#fff;border-color:transparent}.ul-send:hover{border-color:transparent;filter:brightness(1.07)}
 .ul-sendrow{margin:-4px 0 14px}
 .ul-sheet{position:fixed;inset:0;z-index:80;background:rgba(18,20,23,.55);display:flex;align-items:flex-end;justify-content:center;backdrop-filter:blur(3px)}
-.ul-sheet-in{background:var(--color-bg);width:min(560px,100%);max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:16px 18px 22px;animation:ul-fade .25s}
+.ul-sheet-in{background:var(--color-bg);color:var(--color-fg);width:min(560px,100%);max-height:92vh;overflow:auto;border-radius:22px 22px 0 0;padding:16px 18px 22px;animation:ul-fade .25s}
 @media (min-width:700px){.ul-sheet{align-items:center}.ul-sheet-in{border-radius:22px}}
-.ul-sheet-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.ul-sheet-h b{font-size:16px}
-.ul-x{font:inherit;border:0;background:var(--color-panel);border-radius:50%;width:34px;height:34px;cursor:pointer}
+.ul-sheet-h{display:flex;justify-content:space-between;align-items:center;margin:-16px 0 10px;padding:12px 0 8px;position:sticky;top:-16px;z-index:3;background:var(--color-bg)}.ul-sheet-h b{font-size:16px}
+.ul-x{font:inherit;font-size:18px;font-weight:700;line-height:1;display:inline-flex;align-items:center;justify-content:center;flex:none;border:2px solid #C29B5C;background:#C29B5C;color:#121417;border-radius:50%;width:40px;height:40px;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.35)}.ul-x:hover,.ul-x:focus-visible{background:#E3C998;border-color:#E3C998;outline:none}
 .ul-sheet-prev{background:var(--color-panel);border-radius:14px;padding:8px;max-height:42vh;overflow:auto}.ul-sheet-prev img{width:100%;display:block;border-radius:8px}
 .ul-sheet-ag{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.ul-sheet-ag label{font-size:11px;color:var(--color-fg-muted);display:grid;gap:4px;text-transform:uppercase;letter-spacing:.05em}
 .ul-sheet-ag input{font:inherit;font-size:15px;padding:10px 12px;border-radius:10px;border:1px solid var(--color-border-line);background:var(--color-panel);color:var(--color-fg);text-transform:none;letter-spacing:0}
