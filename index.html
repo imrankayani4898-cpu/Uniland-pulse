@@ -595,7 +595,7 @@ html.ul-client #ul-share{display:none!important}
   <a class="ul-brand" href="#guide" aria-label="Uniland home"><span class="ul-mark"><span>UNI</span><svg viewBox="0 0 40 90" aria-hidden="true"><path d="M18 2h4v14h2v12h3v18h3v22h6v8H8v-8h2V46h3V28h3V16h2z" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round"/></svg><span>AND</span></span><small>Market Pulse</small></a>
   <nav class="ul-nav" aria-label="Sections">
     <a href="#guide"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Home</span></a>
-    <a href="#atlas"><svg viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg><span>Dubai map</span></a>
+    <a href="#atlas"><svg viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg><span>UAE map</span></a>
     <a href="#explorer"><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg><span>Area explorer</span></a>
     <a href="#compare"><svg viewBox="0 0 24 24"><rect x="4" y="9" width="5" height="11" rx="1"/><rect x="15" y="4" width="5" height="16" rx="1"/></svg><span>Compare</span></a>
     <a href="#developers"><svg viewBox="0 0 24 24"><path d="M4 21V9l6-4v16M10 21V3l10 5v13M2 21h20M14 11h2M14 15h2M6 12h2M6 16h2"/></svg><span>Developers</span></a>
@@ -657,7 +657,7 @@ html.ul-client #ul-share{display:none!important}
 
   <h2 class="ul-h2s">Where to?</h2>
   <div class="ul-menu">
-    <a class="ul-mtile" href="#atlas"><i><svg viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg></i><b>Dubai map</b><span>Every area, by price</span></a>
+    <a class="ul-mtile" href="#atlas"><i><svg viewBox="0 0 24 24"><path d="M9 4L3 6v14l6-2 6 2 6-2V4l-6 2-6-2zM9 4v14M15 6v14"/></svg></i><b>UAE map</b><span>Every emirate, area and project</span></a>
     <a class="ul-mtile" href="#explorer"><i><svg viewBox="0 0 24 24"><path d="M12 21s-7-6.2-7-11a7 7 0 0 1 14 0c0 4.8-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg></i><b>Area explorer</b><span>Projects, prices, yields</span></a>
     <a class="ul-mtile" href="#compare"><i><svg viewBox="0 0 24 24"><rect x="4" y="9" width="5" height="11" rx="1"/><rect x="15" y="4" width="5" height="16" rx="1"/></svg></i><b>Compare</b><span>Projects or areas side by side</span></a>
     <a class="ul-mtile" href="#developers"><i><svg viewBox="0 0 24 24"><path d="M4 21V9l6-4v16M10 21V3l10 5v13M2 21h20M14 11h2M14 15h2M6 12h2M6 16h2"/></svg></i><b>Developers</b><span>One developer, every project</span></a>
@@ -669,12 +669,12 @@ html.ul-client #ul-share{display:none!important}
 
 <!-- MAP -->
 <section class="ul-tab" id="atlas" hidden>
-  <div class="ul-head"><span class="ul-eyebrow">Dubai &amp; UAE map</span><h2>Every area at a glance</h2><p>Pick an emirate to see its areas and every project. Drag to move, pinch or use + / − to zoom. Tap an area to see its sales and prices.</p></div>
+  <div class="ul-head"><span class="ul-eyebrow">UAE map</span><h2>Every area at a glance</h2><p>Pick an emirate to see its areas and every project. Drag to move, pinch or use + / − to zoom. Tap an area to see its sales and prices.</p></div>
   <div class="ul-pick"><select class="dash-select" data-draw="sel-mapem" data-source="area_geo projects" aria-label="Emirate"></select></div>
   <div class="ul-pick"><select class="dash-select" data-draw="sel-mapyr" data-source="area_years area_periods area_prices" aria-label="Year"></select></div>
   <div class="ul-sub" role="tablist"><button type="button" class="on" data-sub="at-ready">Secondary price</button><button type="button" data-sub="at-off">Off-plan price</button><button type="button" data-sub="at-yield">Rental yield</button></div>
   <div class="ul-card ul-mapcard">
-    <div class="ul-mapwrap" data-zk="at"><div class="ul-chart" data-draw="ch-map" data-source="area_geo area_profile" style="min-height:520px"></div><div class="ul-mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" aria-label="Show Dubai">⟲</button><button type="button" data-z="uae" aria-label="Show whole UAE" style="font-size:10.5px;font-weight:700">UAE</button></div></div>
+    <div class="ul-mapwrap" data-zk="at"><div class="ul-chart" data-draw="ch-map" data-source="area_geo area_profile" style="min-height:520px"></div><div class="ul-mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" aria-label="Back to selected emirate">⟲</button><button type="button" data-z="uae" aria-label="Show whole UAE" style="font-size:10.5px;font-weight:700">UAE</button></div></div>
     <div class="ul-scale" data-draw="map-key" data-source="area_profile area_years area_periods"></div>
   </div>
   <div class="ul-card" data-draw="map-em" data-source="area_geo projects"></div>
@@ -702,7 +702,7 @@ html.ul-client #ul-share{display:none!important}
     <div class="ul-card"><p class="ul-note">Agencies with live listings here. DLD doesn't publish sales by agency.</p><div class="ul-bgrid" data-draw="ex-brokers" data-source="brokers"></div></div>
   </div>
   <div class="ul-panel" id="ex-mp" hidden>
-    <div class="ul-card ul-mapcard"><div class="ul-mapwrap" data-zk="ex"><div class="ul-chart" data-draw="ex-map" data-source="area_geo area_profile" style="min-height:360px"></div><div class="ul-mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" aria-label="Show Dubai">⟲</button><button type="button" data-z="uae" aria-label="Show whole UAE" style="font-size:10.5px;font-weight:700">UAE</button></div></div><div class="ul-scale" data-draw="ex-key" data-source="area_profile"></div></div>
+    <div class="ul-card ul-mapcard"><div class="ul-mapwrap" data-zk="ex"><div class="ul-chart" data-draw="ex-map" data-source="area_geo area_profile" style="min-height:360px"></div><div class="ul-mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">−</button><button type="button" data-z="reset" aria-label="Back to selected emirate">⟲</button><button type="button" data-z="uae" aria-label="Show whole UAE" style="font-size:10.5px;font-weight:700">UAE</button></div></div><div class="ul-scale" data-draw="ex-key" data-source="area_profile"></div></div>
   </div>
 </section>
 
@@ -1186,7 +1186,7 @@ function metricOf(p,m){return m==='off'?p.offplan_psf:m==='yield'?p.yield_pct:p.
 function drawMap(box,metric,hl,H,key){
   const g=rows('area_geo'), P=rows('area_profile');
   if(!g||!P){UL.ph(box,dash.data(g?'area_profile':'area_geo').status);return;}
-  const {svg,W}=UL.svgOf(box,H,'Map of Dubai areas coloured by '+(metric==='off'?'off-plan price':metric==='yield'?'rental yield':'secondary price')+'. Drag to move, pinch or use + and − to zoom, tap an area for details.');
+  const {svg,W}=UL.svgOf(box,H,'Map of UAE areas coloured by '+(metric==='off'?'off-plan price':metric==='yield'?'rental yield':'secondary price')+'. Drag to move, pinch or use + and − to zoom, tap an area for details.');
   svg.style('touch-action','none').style('cursor','grab');
   const la=g.map(r=>r.lat), lo=g.map(r=>r.lon), k=Math.cos(25.1*Math.PI/180);
   let lat0=Math.min(UAEBOX.lat0,...la)-.025, lat1=Math.max(UAEBOX.lat1,...la)+.03, lon0=Math.min(UAEBOX.lon0,...lo)-.03, lon1=Math.max(UAEBOX.lon1,...lo)+.03;
