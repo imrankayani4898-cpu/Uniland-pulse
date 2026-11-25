@@ -464,6 +464,7 @@ details.ul-more[open]>summary{margin-bottom:10px}
 @media (min-width:700px){.ul-sheet{align-items:center}.ul-sheet-in{border-radius:22px}}
 .ul-sheet-h{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}.ul-sheet-h b{font-size:16px}
 .ul-x{font:inherit;border:0;background:var(--color-panel);border-radius:50%;width:34px;height:34px;cursor:pointer}
+.ul-sheet-pick{margin:0 0 10px}.ul-sheet-pick .h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:13px;margin-bottom:6px}.ul-sheet-pick .h b{margin-right:auto}.ul-sheet-pick .h button{font:inherit;font-size:12px;padding:4px 10px;border-radius:999px;border:1px solid var(--color-border,#ccc);background:transparent;color:inherit;cursor:pointer}.ul-sheet-pick .l{display:flex;flex-wrap:wrap;gap:6px;max-height:140px;overflow:auto}.ul-sheet-pick label{display:inline-flex;align-items:center;gap:5px;font-size:13px;padding:5px 10px;border-radius:999px;border:1px solid var(--color-border,#ccc);cursor:pointer;user-select:none}.ul-sheet-pick label.on{background:#C29B5C;border-color:#C29B5C;color:#121417}.ul-sheet-pick input{display:none}
 .ul-sheet-prev{background:var(--color-panel);border-radius:14px;padding:8px;max-height:42vh;overflow:auto}.ul-sheet-prev img{width:100%;display:block;border-radius:8px}
 .ul-sheet-ag{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}.ul-sheet-ag label{font-size:11px;color:var(--color-fg-muted);display:grid;gap:4px;text-transform:uppercase;letter-spacing:.05em}
 .ul-sheet-ag input{font:inherit;font-size:15px;padding:10px 12px;border-radius:10px;border:1px solid var(--color-border-line);background:var(--color-panel);color:var(--color-fg);text-transform:none;letter-spacing:0}
@@ -1143,10 +1144,15 @@ const SZR=[[24.93,55.07],[25.00,55.12],[25.06,55.16],[25.11,55.20],[25.16,55.24]
 const RAMP=['#3E6A93','#8FA9B8','#E3C998','#C29B5C'];
 function AY(a,y){return (rows('area_years')||[]).find(r=>r.area===a&&r.year===y)||null;}
 function mapYr(key){return key==='at'&&st.mapYr&&st.mapYr!=='latest'?st.mapYr:null;}
-function PR(a,k){if(/^\d{4}$/.test(String(k))){const r=AY(a,+k);return r?{psf:r.resale_psf,n:r.resale_sales,period:String(k)+' full year',what:'Resale apartments, average'}:null;}
+function YTDq(y){return [...new Set((rows('area_periods')||[]).filter(r=>new RegExp('^'+y+'-q\\d$').test(r.period_id)).map(r=>r.period_id))].sort();}
+function YTDlab(y){const q=YTDq(y);const M=['Mar','Jun','Sep','Dec'];return y+' year to date'+(q.length?' (Jan–'+M[+q[q.length-1].slice(-1)-1]+')':'');}
+function YTD(a,y){const q=YTDq(y);if(!q.length)return null;const R=q.map(k=>(rows('area_periods')||[]).find(x=>x.area===a&&x.period_id===k));if(R.some(r=>!r||(r.resale_psf??r.ready_psf)==null))return null;
+  const P=R.map(r=>+(r.resale_psf??r.ready_psf)),N=R.map(r=>r.resale_sales??r.ready_sales);const all=N.every(n=>n!=null&&+n>0);const tn=all?N.reduce((t,n)=>t+(+n),0):null;
+  const psf=all?Math.round(P.reduce((t,v,i)=>t+v*N[i],0)/tn):Math.round(P.reduce((t,v)=>t+v,0)/P.length);return {psf,n:tn,period:YTDlab(y),what:'Apartment sales, '+q.length+' quarters combined'};}
+function PR(a,k){if(/^ytd\d{4}$/.test(String(k)))return YTD(a,+String(k).slice(3));if(/^\d{4}$/.test(String(k))){const r=AY(a,+k);return r?{psf:r.resale_psf,n:r.resale_sales,period:String(k)+' full year',what:'Resale apartments, average'}:null;}
   const r=(rows('area_periods')||[]).find(x=>x.area===a&&x.period_id===k);return r?{psf:r.resale_psf??r.ready_psf,n:r.resale_sales??r.ready_sales,period:r.period,what:'Apartment sales'}:null;}
-function PRlist(k){if(/^\d{4}$/.test(String(k)))return (rows('area_years')||[]).filter(r=>r.year===+k&&r.resale_psf!=null).map(r=>({area:r.area,psf:r.resale_psf}));return (rows('area_periods')||[]).filter(r=>r.period_id===k).map(r=>({area:r.area,psf:r.resale_psf??r.ready_psf}));}
-function PRlabel(k){if(/^\d{4}$/.test(String(k)))return k+' full year';const r=(rows('area_periods')||[]).find(x=>x.period_id===k);return r?r.period:k;}
+function PRlist(k){if(/^ytd\d{4}$/.test(String(k))){const y=+String(k).slice(3);return [...new Set((rows('area_periods')||[]).map(r=>r.area))].map(a=>{const r=YTD(a,y);return r?{area:a,psf:r.psf}:null;}).filter(Boolean);}if(/^\d{4}$/.test(String(k)))return (rows('area_years')||[]).filter(r=>r.year===+k&&r.resale_psf!=null).map(r=>({area:r.area,psf:r.resale_psf}));return (rows('area_periods')||[]).filter(r=>r.period_id===k).map(r=>({area:r.area,psf:r.resale_psf??r.ready_psf}));}
+function PRlabel(k){if(/^ytd\d{4}$/.test(String(k)))return YTDlab(+String(k).slice(3));if(/^\d{4}$/.test(String(k)))return k+' full year';const r=(rows('area_periods')||[]).find(x=>x.period_id===k);return r?r.period:k;}
 function metricOf(p,m){return m==='off'?p.offplan_psf:m==='yield'?p.yield_pct:p.ready_psf;}
 function drawMap(box,metric,hl,H,key){
   const g=rows('area_geo'), P=rows('area_profile');
@@ -1214,7 +1220,11 @@ function drawMap(box,metric,hl,H,key){
 dash.draw('sel-mapyr',(sel)=>{const ys=[...new Set((rows('area_years')||[]).map(r=>r.year))].filter(y=>y<new Date().getFullYear()).sort((a,b)=>b-a);
   const ps=[...new Map((rows('area_periods')||[]).filter(r=>/-q\d$/.test(r.period_id)).map(r=>[r.period_id,r.period])).entries()].sort((a,b)=>b[0].localeCompare(a[0]));
   const lat=(rows('area_prices')||[]).find(r=>r.period)||{};const lp=String(lat.period||'Jul–Oct 2026').replace(/^1 /,'').replace(/–\d+ /,'–');
-  sel.replaceChildren(new Option('Latest ('+lp+')','latest'),...ps.map(([k,p])=>new Option(p,k)),...ys.map(y=>new Option(y+' (full year)',String(y))));
+  const cy=new Date().getFullYear();const YS=[...new Set([...(YTDq(cy).length?[cy]:[]),...ys,...ps.map(([k])=>+k.slice(0,4))])].sort((a,b)=>b-a);
+  const grp=YS.map(y=>{const g=document.createElement('optgroup');g.label=String(y);
+    if(y===cy){if(YTDq(cy).length)g.append(new Option(YTDlab(cy).replace(' year to date',' full year so far'),'ytd'+cy));}else if(ys.includes(y))g.append(new Option(y+' full year','' +y));
+    ps.filter(([k])=>k.startsWith(y+'-')).forEach(([k,p])=>g.append(new Option('   '+p,k)));return g;}).filter(g=>g.children.length);
+  sel.replaceChildren(new Option('Latest ('+lp+')','latest'),...grp);
   if(st.mapYr&&![...sel.options].some(o=>o.value===String(st.mapYr)))st.mapYr='latest';sel.value=String(st.mapYr||'latest');
   sel.onchange=()=>{st.mapYr=sel.value;document.querySelectorAll('#atlas .ul-sub').forEach(x=>x.style.display=st.mapYr==='latest'?'':'none');dash.draw('ch-map');dash.draw('map-key');dash.draw('map-card');};});
 dash.draw('ch-map',(box)=>drawMap(box,st.map,null,Math.max(420,Math.min(620,(box.clientWidth||600)*0.75)),'at'));
@@ -1820,7 +1830,7 @@ let cur=null;
 function sheet(){let s=document.getElementById('ul-share');if(s)return s;
   s=el('div','ul-sheet');s.id='ul-share';s.hidden=true;s.setAttribute('role','dialog');s.setAttribute('aria-label','Send report');
   s.innerHTML='<div class="ul-sheet-in"><div class="ul-sheet-h"><b>Send report</b><button type="button" class="ul-x" aria-label="Close">✕</button></div>'+
-   '<div class="ul-sheet-prev"><img alt="Report preview"></div>'+
+   '<div class="ul-sheet-pick" hidden></div><div class="ul-sheet-prev"><img alt="Report preview"></div>'+
    '<div class="ul-sheet-ag"><label>Your name<input name="n" autocomplete="name" placeholder="e.g. Sara Khan"></label><label>Your phone<input name="p" type="tel" autocomplete="tel" placeholder="+971 50 000 0000"></label><label class="ul-sheet-full">Your email<input name="e" type="email" autocomplete="email" placeholder="you@uniland.ae"></label><label class="ul-sheet-full">Send to (email, optional)<input name="to" type="email" placeholder="client or agent email"></label><span>Shown at the bottom of the report. Saved on this phone only.</span><label class="ul-sheet-ck"><input type="checkbox" name="cl"> Add my client link (live market data, opens without a password)</label></div>'+
    '<div class="ul-sheet-b"><button type="button" class="ul-btn gold" data-a="pdf">Send PDF</button><button type="button" class="ul-btn" data-a="img">Send image</button><button type="button" class="ul-btn" data-a="mail">Email</button><button type="button" class="ul-btn" data-a="dl">Download</button></div>'+
    '<p class="ul-note ul-sheet-msg"></p></div>';
@@ -1852,7 +1862,14 @@ async function mail(){const s=sheet(),msg=s.querySelector('.ul-sheet-msg');const
   location.href='mailto:'+encodeURIComponent(to)+'?subject='+encodeURIComponent(cur.spec.title||'Dubai market report')+'&body='+encodeURIComponent(body+'\n\n(Report attached)');
   msg.textContent='Email opened. The PDF is in your downloads — attach it before sending.';
   try{if(window.ULtrack)ULtrack('report-mail');}catch(e){}}
-function open(spec){if(!spec)return;cur={spec};const s=sheet();const a=agent();s.querySelector('input[name=n]').value=a.name||'';s.querySelector('input[name=p]').value=a.phone||'';s.querySelector('input[name=e]').value=a.email||'';s.hidden=false;s.style.display='';try{if(!(history.state&&history.state.modal))history.pushState(Object.assign({},history.state||{},{modal:1}),'',location.hash);}catch(e){}s.querySelector('.ul-sheet-msg').textContent='';preview();}
+function open(spec){if(!spec)return;cur={spec};const s=sheet();const a=agent();s.querySelector('input[name=n]').value=a.name||'';s.querySelector('input[name=p]').value=a.phone||'';s.querySelector('input[name=e]').value=a.email||'';s.hidden=false;s.style.display='';try{if(!(history.state&&history.state.modal))history.pushState(Object.assign({},history.state||{},{modal:1}),'',location.hash);}catch(e){}s.querySelector('.ul-sheet-msg').textContent='';pick(spec);preview();}
+function pick(spec){const s=sheet(),box=s.querySelector('.ul-sheet-pick');const P=spec.pick;if(!P||!P.items.length){box.hidden=true;box.replaceChildren();return;}
+  box.hidden=false;const sel=new Set(P.sel||P.items);const h=el('div','h');const cnt=el('b');const L=el('div','l');
+  const upd=()=>{cnt.textContent=P.label+' ('+sel.size+' of '+P.items.length+')';L.querySelectorAll('label').forEach(x=>x.classList.toggle('on',sel.has(x.dataset.v)));};
+  let tm;const rebuild=()=>{upd();clearTimeout(tm);tm=setTimeout(()=>{P.sel=[...sel];if(P.save)P.save(P.sel);const ns=P.build(P.sel);ns.pick=P;cur={spec:ns};preview();},250);};
+  const b1=el('button',null,'All');b1.type='button';b1.onclick=()=>{P.items.forEach(a=>sel.add(a));rebuild();};const b2=el('button',null,'None');b2.type='button';b2.onclick=()=>{sel.clear();rebuild();};
+  h.append(cnt,b1,b2);P.items.forEach(a=>{const l=el('label');l.dataset.v=a;const c=document.createElement('input');c.type='checkbox';l.append(c,document.createTextNode(a));l.onclick=e=>{e.preventDefault();sel.has(a)?sel.delete(a):sel.add(a);rebuild();};L.append(l);});
+  box.replaceChildren(h,L);upd();}
 window.ULpdf=()=>new Promise(r=>{const f=new FileReader();f.onload=()=>r(f.result);f.readAsDataURL(pdfFromCanvas(cur.cv));});
 function cmpSpec(ids){const all=rows('projects')||[];const L=ids.map(id=>all.find(r=>r.id===id)).filter(Boolean);if(L.length<2)return null;const n=L.length;const cols=[.34,...L.map(()=>.66/n)];
   const pa=r=>prof(r.area);
@@ -2178,18 +2195,18 @@ function share(){const a=agent();
 // ---------- Weekly market report (built from the latest data, any time) ----------
 function rows(id){const r=dash.data(id);return r.status==='ok'?r.data:[];}
 const T=n=>(n?n.textContent:'').replace(/\s+/g,' ').trim();
-function weekly(){
+function weekly(PK){
   const tiles=[];document.querySelectorAll('#guide .ul-kpis .ul-kpi').forEach((k,i)=>{const l=T(k.querySelector('.l')),v=T(k.querySelector('.v')),c=T(k.querySelector('.c'));if(l&&v)tiles.push({l,v,s:c,hi:i<2});});
   const S=[];const pulse=rows('pulse').filter(r=>/^Week/i.test(r.period||'')).slice(0,6);
   if(pulse.length)S.push({h:'Week by week (DLD)',head:['Week','All deals','Sales','Mortgages'],cols:[.4,.2,.2,.2],rows:pulse.map(r=>[r.period||'',r.total_bn!=null?'AED '+r.total_bn+'bn':'—',r.sales_bn!=null?'AED '+r.sales_bn+'bn':'—',r.mortgages_bn!=null?'AED '+r.mortgages_bn+'bn':'—'])});
   const ms=rows('market_split').slice().sort((a,b)=>a.id<b.id?1:-1).slice(0,6);
   if(ms.length)S.push({h:'Monthly sales',head:['Month','Off-plan','Secondary','Total'],cols:[.31,.23,.23,.23],rows:ms.map(r=>[r.label,'AED '+r.offplan_bn+'bn','AED '+r.secondary_bn+'bn','AED '+r.total_bn+'bn'])});
-  const BO=['Studio','1 BR','2 BR','3 BR','4 BR','5 BR','6 BR','7 BR'],bi=b=>{const i=BO.indexOf(b);return i<0?99:i;};const rb=rows('rent_beds').filter(r=>r.bedrooms!=='All'&&r.rent_yoy_pct!=null&&r.avg_rent_aed!=null).sort((a,b)=>a.area.localeCompare(b.area)||bi(a.bedrooms)-bi(b.bedrooms));
+  const BO=['Studio','1 BR','2 BR','3 BR','4 BR','5 BR','6 BR','7 BR'],bi=b=>{const i=BO.indexOf(b);return i<0?99:i;};const rbAll=rows('rent_beds').filter(r=>r.bedrooms!=='All'&&r.rent_yoy_pct!=null&&r.avg_rent_aed!=null);const rbAreas=[...new Set(rbAll.map(r=>r.area))].sort();let rbSel=PK;if(!rbSel){try{const v=JSON.parse(localStorage.getItem('ul-rent-areas')||'null');if(Array.isArray(v))rbSel=v.filter(a=>rbAreas.includes(a));}catch(e){}}if(!rbSel||!rbSel.length&&!PK)rbSel=rbAreas;const rbS=new Set(rbSel);const rb=rbAll.filter(r=>rbS.has(r.area)).sort((a,b)=>a.area.localeCompare(b.area)||bi(a.bedrooms)-bi(b.bedrooms));
   if(rb.length)S.push({h:'Rents by bedroom now vs a year ago',head:['Area','Type','Average rent','Change'],cols:[.36,.18,.26,.2],rows:rb.map((r,i)=>[i&&rb[i-1].area===r.area?'':r.area,r.bedrooms,'AED '+Math.round(r.avg_rent_aed).toLocaleString('en'),(r.rent_yoy_pct>=0?'+':'')+r.rent_yoy_pct+'%'])});
   const la=rows('launches').slice(0,5);if(la.length)S.push({h:'New launches',lines:la.map(r=>(r.project||'')+(r.developer?' – '+r.developer:'')+(r.area?', '+r.area:'')+(r.detail?': '+r.detail:''))});
   const nw=rows('news').slice(0,5);if(nw.length)S.push({h:'Headlines',lines:nw.map(r=>(r.date?r.date+' · ':'')+r.headline)});
   const wk=pulse[0]&&pulse[0].period?pulse[0].period.replace(/^Week\s*/,''):'';
-  return {kicker:'Weekly market report',title:'Dubai property this week',sub:wk?'Latest DLD week: '+wk:null,tiles,sections:S,file:'Uniland weekly market report',text:'Dubai property market – weekly report'+(wk?' ('+wk+')':'')+', from Uniland Market Pulse.'};
+  return {pick:{label:'Rent areas to include',items:rbAreas,sel:rbSel,build:weekly,save:v=>{try{localStorage.setItem('ul-rent-areas',JSON.stringify(v));}catch(e){}}},kicker:'Weekly market report',title:'Dubai property this week',sub:wk?'Latest DLD week: '+wk:null,tiles,sections:S,file:'Uniland weekly market report',text:'Dubai property market – weekly report'+(wk?' ('+wk+')':'')+', from Uniland Market Pulse.'};
 }
 function addButtons(){const hero=document.querySelector('#guide .ul-hero');if(!hero||hero.querySelector('.ul-hero-acts'))return;
   const row=el('div','ul-hero-acts');const w=el('button','ul-btn gold','Weekly market report');w.type='button';w.onclick=()=>{if(window.ULopenSpec)ULopenSpec(weekly());};
